@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Nos Véhicules — E3S Mercedes-Benz</title>
+
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+
+<body>
+
+<header class="site-header">
+
+    <div class="nav-inner">
+
+        <div class="logo">
+            E3S · MERCEDES-BENZ
+        </div>
+
+        <nav class="nav-links">
+            <a href="agence.html">L'Agence</a>
+            <a href="index.html">Accueil</a>
+            <a href="vehicules.html">Nos Véhicules</a>
+            <a href="showroom.html">
+                Nos showroom
+            </a>
+            <a href="atelier.html">Atelier</a>
+             <a href="magasin.html">magasin</a>
+            <a href="proforma.html">Demande de proforma</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+
+    </div>
+
+</header>
+
+<button class="back-btn" onclick="if(history.length>1){history.back()}else{location.href='index.html'}" title="Retour">←</button>
+<section>
+
+    <div class="section-head">
+        <h2>Nos véhicules</h2>
+        <p>Découvrez notre sélection de véhicules Mercedes-Benz</p>
+    </div>
+
+    <!-- RECHERCHE / FILTRES / TRI -->
+    <div class="vehicle-tools">
+
+        <div class="search-box">
+            <input
+                type="text"
+                id="search-vehicle"
+                placeholder="🔎 Rechercher un modèle..."
+                oninput="filtrerVehicules()"
+            >
+        </div>
+
+        <select id="filter-gamme" onchange="filtrerVehicules()">
+            <option value="">Toutes les gammes</option>
+            <option value="Berline">Berline</option>
+            <option value="SUV">SUV</option>
+            <option value="Compacte">Compacte</option>
+        </select>
+
+        <select id="filter-motorisation" onchange="filtrerVehicules()">
+            <option value="">Toutes les motorisations</option>
+            <option value="Essence">Essence</option>
+            <option value="Diesel">Diesel</option>
+            <option value="Électrique">Électrique</option>
+        </select>
+
+        <select id="filter-disponibilite" onchange="filtrerVehicules()">
+            <option value="">Disponibilité</option>
+            <option value="true">Disponible</option>
+            <option value="false">Non disponible</option>
+        </select>
+
+        <select id="sort-vehicle" onchange="filtrerVehicules()">
+            <option value="">Trier par</option>
+            <option value="prix-asc">Prix croissant</option>
+            <option value="prix-desc">Prix décroissant</option>
+            <option value="annee-desc">Année récente</option>
+            <option value="annee-asc">Année ancienne</option>
+        </select>
+
+    </div>
+
+    <!-- LISTE DES VEHICULES -->
+    <div class="grid" id="grid-vehicules">
+        <div class="loading">
+            Chargement des véhicules...
+        </div>
+    </div>
+
+</section>
+
+
+
+
+<footer>
+    © 2026 E3S — Agence Mercedes-Benz
+</footer>
+
+
+<script src="assets/script.js"></script>
+
+<script>
+    chargerVehicules('grid-vehicules');
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Administration — E3S Mercedes-Benz</title>
+    <link rel="stylesheet" href="assets/style.css">
+<style>
+.admin{max-width:1100px;margin:50px auto;padding:0 20px}
+.admin-head{text-align:center;margin-bottom:30px}
+.admin-head h1{margin-bottom:6px}
+
+/* 3 stats: nafs l'largeur w l'hauteur, fil wast */
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+  max-width:600px;
+  margin:0 auto 35px;
+}
+.stat{
+  background:#111;color:#fff;
+  padding:22px 10px;
+  border-radius:7px;
+  text-align:center;
+}
+.stat b{display:block;font-size:26px;margin-bottom:4px}
+
+/* 4 cartes: nafs l'largeur w l'hauteur */
+.admin-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:20px;
+  align-items:stretch;
+}
+.admin-card{
+  display:flex;
+  flex-direction:column;
+  background:#fff;border:1px solid #ddd;
+  padding:25px;border-radius:8px;
+  box-shadow:0 4px 15px #0000000d;
+  min-width:0;
+}
+.admin-card h3{margin-top:0;margin-bottom:10px}
+.admin-card p{flex-grow:1;line-height:1.5}
+.admin-card a,.admin-card button{
+  display:block;width:100%;padding:11px;margin-top:16px;
+  background:#111;color:#fff;border:0;text-align:center;
+  box-sizing:border-box;cursor:pointer;
+}
+
+@media (max-width:1000px){.admin-grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:600px){
+  .admin-grid{grid-template-columns:1fr}
+  .stats{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+    <header class="site-header"><div class="nav-inner"><div class="logo">E3S · ADMINISTRATION</div>
+        <nav class="nav-links"><a href="index.html">Site</a>
+            <a href="#" onclick="logout()">Déconnexion</a></nav></div>
+          </header>
+            <button class="back-btn" onclick="goBack()" title="Retour">←</button>
+            <main class="admin"><div class="admin-head"><div><h1>Tableau de bord</h1>
+                <p>Gestion du site E3S — Mercedes-Benz</p></div></div>
+                <div class="stats"><div class="stat"><b id="nbV">—</b>Véhicules</div>
+                <div class="stat"><b id="nbD">—</b>Demandes</div><div class="stat"><b id="nbA">—</b>Actualités</div></div><div class="admin-grid"><div class="admin-card"><h3>🚗 Véhicules</h3><p>Consulter, ajouter, modifier et supprimer les véhicules du catalogue.</p><a href="admin-vehicules.html">Gérer les véhicules</a></div><div class="admin-card"><h3>📄 Demandes proforma</h3><p>Consulter les demandes, modifier leur statut et exporter les données.</p><a href="admin-proforma.html">Gérer les demandes</a></div><div class="admin-card"><h3>📰 Actualités</h3><p>Publier et gérer les actualités de l'agence.</p><a href="admin-actualites.html">Gérer les actualités</a></div><div class="admin-card"><h3>🔧 Activités</h3><p>Gérer les contenus Showroom, Atelier et Magasin.</p><a href="admin-activites.html">Gérer les activités</a></div></div></main><script src="admin.js"></script><script>requireLogin();Promise.all(['/api/vehicules','/api/demandes','/api/actualites'].map(x=>api(x).then(r=>r.json()))).then(([v,d,a])=>{nbV.textContent=v.length;nbD.textContent=d.length;nbA.textContent=a.length}).catch(console.error);</script>
+    
+
+
+</body>
+    </html>

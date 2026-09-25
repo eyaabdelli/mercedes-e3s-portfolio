@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>E3S Mercedes-Benz</title>
+
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+
+<body>
+
+<header class="site-header">
+
+    <div class="nav-inner">
+
+        <div class="logo">
+            E3S · MERCEDES-BENZ
+        </div>
+
+        <nav class="nav-links">
+            <a href="agence.html">L'Agence</a>
+
+            <a href="index.html">
+                Accueil
+            </a>
+
+            <a href="vehicules.html">
+                Nos Véhicules
+            </a>
+             <a href="showroom.html">
+                Nos showroom
+            </a>
+            <a href="atelier.html">Atelier</a>
+             <a href="magasin.html">magasin</a>
+
+            <a href="proforma.html">
+                Demande de proforma
+            </a>
+
+            <a href="contact.html">
+                Contact
+            </a>
+
+        </nav>
+
+    </div>
+
+</header>
+
+
+
+<button class="back-btn" onclick="if(history.length>1){history.back()}else{location.href='index.html'}" title="Retour">←</button>
+
+
+<!-- INTRODUCTION -->
+
+
+<!-- HERO -->
+
+<section class="hero">
+
+    <h1>
+        L'excellence Mercedes-Benz
+    </h1>
+
+    <p>
+        Découvrez notre gamme de véhicules et demandez votre facture proforma en ligne.
+    </p>
+
+</section>
+
+
+<!-- NOS VÉHICULES -->
+
+<section class="vehicles-slider-section">
+
+    <div class="section-head">
+
+        <h2>
+            Nos véhicules
+        </h2>
+
+        <p>
+            Un aperçu de la gamme disponible
+        </p>
+
+    </div>
+
+
+    <div class="slider-container">
+
+        <button
+            class="slider-btn prev"
+            onclick="sliderPrev()">
+            ❮
+        </button>
+
+
+        <div class="slider-window">
+
+            <div
+                class="grid"
+                id="grid-preview">
+
+                <div class="loading">
+                    Chargement des véhicules...
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="slider-btn next"
+            onclick="sliderNext()">
+            ❯
+        </button>
+
+    </div>
+
+</section>
+
+
+
+<!-- SERVICES PRINCIPAUX -->
+
+<section class="services-section">
+
+    <div class="section-head">
+        <h2>Nos services</h2>
+        <p>Des services pensés pour vous accompagner</p>
+    </div>
+
+    <div class="services-grid">
+
+        <div class="service-card">
+            <div class="service-icon">🚗</div>
+            <h3>Vente de véhicules</h3>
+            <p>
+                Découvrez notre gamme de véhicules Mercedes-Benz
+                disponibles à la vente.
+            </p>
+        </div>
+
+
+        <div class="service-card">
+            <div class="service-icon">🔧</div>
+            <h3>Service après-vente</h3>
+            <p>
+                Un accompagnement professionnel pour l'entretien
+                et la maintenance de votre véhicule.
+            </p>
+        </div>
+
+
+        <div class="service-card">
+            <div class="service-icon">🚘</div>
+            <h3>Test Drive</h3>
+            <p>
+                Découvrez les performances et le confort
+                d'un véhicule Mercedes-Benz.
+            </p>
+        </div>
+
+
+        <div class="service-card">
+            <div class="service-icon">📄</div>
+            <h3>Demande de proforma</h3>
+            <p>
+                Demandez facilement votre facture proforma
+                directement en ligne.
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
+
+
+
+
+
+
+<!-- ACTUALITÉS -->
+
+<section class="news-section">
+
+    <div class="section-head">
+        <h2>Actualités</h2>
+        <p>Découvrez les dernières nouveautés de Sfax Silver Star</p>
+    </div>
+
+    <div class="news-grid">
+
+        <article class="news-card">
+            <div class="news-content">
+                <span class="news-date">NOUVEAUTÉ</span>
+
+                <h3>
+                    Découvrez la nouvelle gamme Mercedes-Benz
+                </h3>
+
+                <p>
+                    Explorez nos nouveaux modèles et découvrez
+                    les dernières innovations Mercedes-Benz.
+                </p>
+
+                <a href="vehicules.html" class="news-link">
+                    En savoir plus →
+                </a>
+            </div>
+        </article>
+
+
+        <article class="news-card">
+            <div class="news-content">
+                <span class="news-date">SERVICE</span>
+
+                <h3>
+                    Votre véhicule mérite le meilleur service
+                </h3>
+
+                <p>
+                    Notre équipe vous accompagne pour l'entretien
+                    et la maintenance de votre Mercedes-Benz.
+                </p>
+
+                <a href="contact.html" class="news-link">
+                    En savoir plus →
+                </a>
+            </div>
+        </article>
+
+
+        <article class="news-card">
+            <div class="news-content">
+                <span class="news-date">ÉVÉNEMENT</span>
+
+                <h3>
+                    Vivez l'expérience Mercedes-Benz
+                </h3>
+
+                <p>
+                    Découvrez nos véhicules et profitez d'une
+                    expérience unique à Sfax Silver Star.
+                </p>
+
+                <a href="contact.html" class="news-link">
+                    En savoir plus →
+                </a>
+            </div>
+        </article>
+
+    </div>
+
+</section>
+
+
+
+
+
+
+
+<!-- ACCÈS RAPIDE AU CATALOGUE -->
+
+<section class="catalogue-section">
+
+    <div class="catalogue-content">
+
+        <span>NOTRE GAMME</span>
+
+        <h2>
+            Découvrez toute notre gamme Mercedes-Benz
+        </h2>
+
+        <p>
+            Explorez nos véhicules disponibles et trouvez
+            le modèle qui correspond à vos besoins.
+        </p>
+
+        <a href="vehicules.html" class="catalogue-button">
+            VOIR LE CATALOGUE →
+        </a>
+
+    </div>
+
+</section>
+
+
+
+
+
+<!-- CONTACT RAPIDE -->
+
+<section class="quick-contact-section">
+
+    <div class="quick-contact-content">
+
+        <span>CONTACTEZ-NOUS</span>
+
+        <h2>
+            Une question ? 
+            Notre équipe est à votre disposition.
+        </h2>
+
+        <p>
+            Pour plus d'informations sur nos véhicules,
+            nos services ou une demande de proforma,
+            contactez-nous.
+        </p>
+
+        <a href="contact.html" class="contact-button">
+            NOUS CONTACTER →
+        </a>
+
+    </div>
+
+</section>
+
+
+
+
+<!-- FOOTER -->
+
+<footer>
+    © 2026 E3S — Agence Mercedes-Benz
+</footer>
+
+
+<script src="assets/script.js"></script>
+
+<script>
+
+    chargerVehicules('grid-preview');
+
+</script>
+
+</body>
+</html>

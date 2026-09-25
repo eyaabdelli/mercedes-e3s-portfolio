@@ -1,0 +1,23 @@
+<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Connexion — E3S Mercedes-Benz</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <style>body{background:#0a0a0b;min-height:100vh;display:flex;align-items:center;justify-content:center}.login{width:min(430px,92%);background:#fff;padding:38px;border-radius:10px;box-shadow:0 15px 50px #0008}.login h1{margin:0 0 8px}.login p{color:#666;margin-bottom:25px}.login input{width:100%;padding:13px;margin:7px 0 16px;border:1px solid #ddd;box-sizing:border-box}.login button{width:100%;padding:13px;background:#111;color:#fff;border:0;cursor:pointer}.err{display:none;color:#b00020;margin-top:15px;font-size:14px}.back{display:block;text-align:center;margin-top:18px;color:#555}</style>
+</head>
+
+
+
+
+<button class="back-btn" onclick="if(history.length>1){history.back()}else{location.href='index.html'}" title="Retour">←</button>
+
+
+<!-- INTRODUCTION -->
+    <body><main class="login"><h1>E3S — Administration</h1><p>Connectez-vous pour accéder à l'espace d'administration.</p>
+        <form id="loginForm"><label>E-mail</label><input id="email" type="email" required>
+            <label>Mot de passe</label><input id="password" type="password" required>
+            <button>Se connecter</button>
+            <div id="err" class="err"></div></form><a class="back" href="index.html">← Retour au site</a></main>
+            <script>const API='http://localhost:8080';document.getElementById('loginForm').addEventListener('submit',async e=>{e.preventDefault();const email=document.getElementById('email').value.trim(),password=document.getElementById('password').value;const token=btoa(unescape(encodeURIComponent(email+':'+password)));try{const r=await fetch(API+'/api/auth/me',{headers:{Authorization:'Basic '+token}});if(!r.ok)throw new Error();localStorage.setItem('e3sAuth',token);location.href='admin.html';}catch(x){const er=document.getElementById('err');er.textContent='E-mail ou mot de passe incorrect, ou backend arrêté.';er.style.display='block';}});
+
+            </script>
+            </body>
+            </html>

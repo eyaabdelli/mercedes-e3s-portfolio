@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Demande de proforma — E3S Mercedes-Benz</title>
+
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+
+<body>
+
+<header class="site-header">
+
+    <div class="nav-inner">
+
+        <div class="logo">
+            E3S · MERCEDES-BENZ
+        </div>
+
+        <nav class="nav-links">
+            <a href="agence.html">L'Agence</a>
+            <a href="index.html">Accueil</a>
+            <a href="vehicules.html">Nos Véhicules</a>
+            <a href="proforma.html">Demande de proforma</a>
+            <a href="contact.html">Contact</a>
+            <a href="atelier.html">Atelier</a>
+             <a href="magasin.html">magasin</a>
+        </nav>
+
+    </div>
+
+</header>
+
+<button class="back-btn" onclick="if(history.length>1){history.back()}else{location.href='index.html'}" title="Retour">←</button>
+
+
+<!-- INTRODUCTION -->
+<section style="max-width:560px;">
+
+    <div class="section-head">
+
+        <h2>Demande de facture proforma</h2>
+
+        <p>
+            Remplissez le formulaire pour envoyer votre demande.
+        </p>
+
+    </div>
+
+
+    <form id="form-proforma">
+
+        <!-- E-mail -->
+        <div class="field">
+
+            <label>E-mail *</label>
+
+            <input
+                type="email"
+                id="email"
+                required
+            >
+
+        </div>
+
+
+        <!-- Nom -->
+        <div class="field">
+
+            <label>Nom *</label>
+
+            <input
+                type="text"
+                id="nom"
+                required
+            >
+
+        </div>
+
+
+        <!-- Prénom -->
+        <div class="field">
+
+            <label>Prénom *</label>
+
+            <input
+                type="text"
+                id="prenom"
+                required
+            >
+
+        </div>
+
+
+        <!-- Téléphone -->
+        <div class="field">
+
+            <label>Téléphone *</label>
+
+            <input
+                type="tel"
+                id="telephone"
+                required
+            >
+
+        </div>
+
+
+        <!-- Adresse -->
+        <div class="field">
+
+            <label>Adresse *</label>
+
+            <input
+                type="text"
+                id="adresse"
+                required
+            >
+
+        </div>
+
+
+        <!-- Société -->
+        <div class="field">
+
+            <label>Société</label>
+
+            <input
+                type="text"
+                id="societe"
+            >
+
+        </div>
+
+
+        <!-- Véhicule -->
+        <div class="field">
+
+            <label>Véhicule sélectionné *</label>
+
+            <select id="vehicule" required>
+
+                <option value="">
+                    -- Sélectionner un véhicule --
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- Quantité -->
+        <div class="field">
+
+            <label>Quantité *</label>
+
+            <input
+                type="number"
+                id="quantite"
+                min="1"
+                value="1"
+                required
+            >
+
+        </div>
+
+
+        <!-- Commentaire -->
+        <div class="field">
+
+            <label>Commentaire</label>
+
+            <textarea
+                id="commentaire"
+                rows="4"
+            ></textarea>
+
+        </div>
+
+
+        <button
+            type="submit"
+            class="btn-fill"
+            style="border:none;cursor:pointer;"
+        >
+            Envoyer la demande
+        </button>
+
+
+        <div
+            class="form-success"
+            id="success"
+        >
+            ✓ Votre demande a bien été envoyée. Merci !
+        </div>
+
+
+        <div
+            class="form-error"
+            id="error"
+        ></div>
+
+    </form>
+
+</section>
+
+
+<footer>
+
+    © 2026 E3S — Agence Mercedes-Benz
+
+</footer>
+
+
+<script src="assets/script.js"></script>
+
+
+<script>
+
+// ==========================================
+// CHARGER LES VEHICULES DEPUIS LE BACKEND
+// ==========================================
+
+const selectVehicule =
+    document.getElementById("vehicule");
+
+
+fetch(API_BASE + "/api/vehicules")
+
+    .then(response => {
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Impossible de charger les véhicules"
+            );
+
+        }
+
+        return response.json();
+
+    })
+
+    .then(vehicules => {
+
+        vehicules.forEach(v => {
+
+            const option =
+                document.createElement("option");
+
+            // IMPORTANT :
+            // la valeur est l'ID du véhicule
+
+            option.value = v.id;
+
+            // Le texte affiché est le modèle
+
+            option.textContent =
+                v.gamme
+                    ? v.gamme + " — " + v.modele
+                    : v.modele;
+
+            selectVehicule.appendChild(option);
+
+        });
+
+
+        // Si on arrive depuis une fiche véhicule
+        // avec ?id=3 par exemple
+
+        const params =
+            new URLSearchParams(
+                window.location.search
+            );
+
+        const idSelectionne =
+            params.get("id");
+
+
+        if (idSelectionne) {
+
+            selectVehicule.value =
+                idSelectionne;
+
+        }
+
+    })
+
+    .catch(error => {
+
+        console.error(error);
+
+        document.getElementById("error").innerText =
+            "Impossible de charger les véhicules.";
+
+        document.getElementById("error")
+            .classList.add("show");
+
+    });
+
+
+// ==========================================
+// ENVOYER LA DEMANDE
+// ==========================================
+
+document
+    .getElementById("form-proforma")
+    .addEventListener("submit", function(e) {
+
+        e.preventDefault();
+
+
+        const vehiculeId =
+            document.getElementById("vehicule").value;
+
+
+        // Vérifier qu'un véhicule est sélectionné
+
+        if (!vehiculeId) {
+
+            document.getElementById("error").innerText =
+                "Veuillez sélectionner un véhicule.";
+
+            document.getElementById("error")
+                .classList.add("show");
+
+            return;
+
+        }
+
+
+        // ==================================
+        // DONNEES ENVOYEES AU BACKEND
+        // ==================================
+
+        const data = {
+
+            email:
+                document.getElementById("email").value,
+
+            nom:
+                document.getElementById("nom").value,
+
+            prenom:
+                document.getElementById("prenom").value,
+
+            telephone:
+                document.getElementById("telephone").value,
+
+            adresse:
+                document.getElementById("adresse").value,
+
+            societe:
+                document.getElementById("societe").value,
+
+            // IMPORTANT :
+            // Le backend attend un objet Vehicule
+            // avec son ID
+
+            vehicule: {
+                id: Number(vehiculeId)
+            },
+
+            quantite:
+                parseInt(
+                    document.getElementById("quantite").value
+                ) || 1,
+
+            commentaire:
+                document.getElementById("commentaire").value
+        };
+
+
+        // Cacher les anciens messages
+
+        document.getElementById("success")
+            .classList.remove("show");
+
+        document.getElementById("error")
+            .classList.remove("show");
+
+
+        // ==================================
+        // ENVOI AU SPRING BOOT
+        // ==================================
+
+        fetch(API_BASE + "/api/demandes", {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify(data)
+
+        })
+
+
+        .then(response => {
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Erreur serveur : " +
+                    response.status
+                );
+
+            }
+
+            return response.json();
+
+        })
+
+
+        .then(result => {
+
+            console.log(
+                "Demande enregistrée :",
+                result
+            );
+
+
+            document.getElementById("success")
+                .classList.add("show");
+
+
+            document.getElementById("form-proforma")
+                .reset();
+
+        })
+
+
+        .catch(error => {
+
+            console.error(error);
+
+
+            document.getElementById("error")
+                .innerText =
+                    "Erreur : " +
+                    error.message;
+
+
+            document.getElementById("error")
+                .classList.add("show");
+
+        });
+
+    });
+
+</script>
+
+
+</body>
+</html>

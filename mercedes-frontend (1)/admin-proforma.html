@@ -1,0 +1,27 @@
+<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Demandes proforma — Administration</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <style>.wrap{max-width:1400px;margin:40px auto;padding:0 20px}
+    .top{display:flex;justify-content:space-between;gap:15px;align-items:center;flex-wrap:wrap}
+    .table{background:#fff;padding:20px;border-radius:10px;overflow:auto;box-shadow:0 3px 15px #0001}table{width:100%;border-collapse:collapse;min-width:1100px}th{background:#111;color:#fff;padding:13px;text-align:left}td{padding:12px;border-bottom:1px solid #ddd}
+    button,select{padding:8px;border:0;border-radius:4px}
+    .detail{margin:8px 0;padding-bottom:8px;border-bottom:1px solid #eee}
+    .modal{display:none;position:fixed;inset:0;background:#0009;z-index:100}
+    .modal-box{background:#fff;width:min(650px,90%);max-height:80vh;overflow:auto;margin:6% auto;padding:30px;border-radius:10px}
+    .btn{background:#111;color:#fff;padding:10px 15px;text-decoration:none}
+    .del{background:#b00020;color:#fff}
+    .actions{display:flex;gap:7px}
+    </style>
+    </head>
+    <body>
+        <header class="site-header"><div class="nav-inner"><div class="logo">E3S · DEMANDES PROFORMA</div>
+            <nav class="nav-links"><a href="admin.html">Dashboard</a>
+                <a href="#" onclick="logout()">Déconnexion</a></nav></div>
+            </header>
+            <button class="back-btn" onclick="if(history.length>1){history.back()}else{location.href='index.html'}" title="Retour">←</button>
+            <main class="wrap"><div class="top"><div>
+                <h1>Demandes de facture proforma</h1>
+                <p>Consultation et traitement des demandes clients.</p></div>
+                <button class="btn" onclick="exporter()">📥 Exporter CSV</button></div>
+                <div class="table"><table><thead><tr><th>ID</th><th>Client</th><th>Email</th><th>Téléphone</th><th>Véhicule</th><th>Qté</th>
+                    <th>Date</th><th>Statut</th><th>Actions</th></tr></thead><tbody id="tbody"><tr><td colspan="9">Chargement...</td></tr></tbody></table></div></main><div id="modal" class="modal" onclick="if(event.target===this)fermer()"><div class="modal-box"><button onclick="fermer()">✕</button><h2>Détails de la demande</h2><div id="details"></div></div></div><script src="admin.js"></script><script>requireLogin();let demandes=[];async function charger(){const r=await api('/api/demandes');demandes=await r.json();demandes.sort((a,b)=>new Date(b.dateCreation||0)-new Date(a.dateCreation||0));tbody.innerHTML=demandes.length?demandes.map((d,i)=>{const c=((d.prenom||'')+' '+(d.nom||'')).trim()||'—',v=d.vehicule?((d.vehicule.gamme||'')+' — '+(d.vehicule.modele||'')):'Non renseigné';return `<tr><td>${d.id??i+1}</td><td>${c}</td><td>${d.email||'—'}</td><td>${d.telephone||'—'}</td><td>${v}</td><td>${d.quantite||1}</td><td>${d.dateCreation?new Date(d.dateCreation).toLocaleDateString('fr-FR'):'—'}</td><td><select onchange="statut(${d.id},this.value)"><option ${d.statut==='En attente'?'selected':''}>En attente</option><option ${d.statut==='Traitée'?'selected':''}>Traitée</option><option ${d.statut==='Refusée'?'selected':''}>Refusée</option></select></td><td><div class="actions"><button onclick='voir(${JSON.stringify(d).replace(/'/g,"&#39;")})'>Détails</button><button class="del" onclick="supprimer(${d.id})">Supprimer</button></div></td></tr>`}).join(''):'<tr><td colspan="9">Aucune demande.</td></tr>'}async function statut(id,s){const r=await api('/api/demandes/'+id,{method:'PUT',body:JSON.stringify({statut:s})});if(!r.ok)alert('Erreur lors de la modification');}async function supprimer(id){if(!confirm('Supprimer cette demande ?'))return;const r=await api('/api/demandes/'+id,{method:'DELETE'});if(r.ok)charger();else alert('Erreur');}function voir(d){details.innerHTML=Object.entries({Nom:d.nom,Prénom:d.prenom,Société:d.societe,Email:d.email,Téléphone:d.telephone,Adresse:d.adresse,Véhicule:d.vehicule?d.vehicule.modele:'—',Quantité:d.quantite,Commentaire:d.commentaire,Date:d.dateCreation?new Date(d.dateCreation).toLocaleString('fr-FR'):'—',Statut:d.statut}).map(([k,v])=>`<div class="detail"><b>${k} :</b> ${v||'—'}</div>`).join('');modal.style.display='block'}function fermer(){modal.style.display='none'}function exporter(){if(!demandes.length)return alert('Aucune demande à exporter.');let csv='ID;Client;Email;Téléphone;Véhicule;Quantité;Date;Statut\n';demandes.forEach(d=>{let c=((d.prenom||'')+' '+(d.nom||'')).trim(),v=d.vehicule?d.vehicule.modele:'',date=d.dateCreation?new Date(d.dateCreation).toLocaleDateString('fr-FR'):'';csv+=`"${d.id}";"${c}";"${d.email||''}";"${d.telephone||''}";"${v}";"${d.quantite||1}";"${date}";"${d.statut||''}"\n`});const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}));a.download='demandes_proforma.csv';a.click()}charger();</script></body></html>

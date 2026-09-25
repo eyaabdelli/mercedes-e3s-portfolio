@@ -1,0 +1,48 @@
+<!DOCTYPE html><html lang="fr">
+    <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+        <title>Gestion véhicules — E3S</title>
+        <link rel="stylesheet" href="assets/style.css">
+        <style>.wrap{max-width:1300px;margin:35px auto;padding:0 20px}.bar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.form{background:#fff;padding:20px;border:1px solid #ddd;border-radius:8px;margin:20px 0}.form-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.form-grid input,.form-grid textarea{width:100%;padding:10px;box-sizing:border-box;border:1px solid #ccc}.form-grid textarea{grid-column:1/-1}.btn{padding:10px 15px;
+            background:#111;color:#fff;border:0;cursor:pointer}
+            .table{overflow:auto;background:#fff;padding:15px;border-radius:8px}
+            table{width:100%;border-collapse:collapse;min-width:1000px}
+            th{background:#111;color:#fff;padding:10px;text-align:left}td{padding:10px;border-bottom:1px solid #ddd}
+            .thumb{width:90px;height:60px;object-fit:cover}
+            </style>
+            </head>
+            <body>
+                <header class="site-header">
+                    <div class="nav-inner">
+                        <div class="logo">E3S · VÉHICULES</div>
+                        <nav class="nav-links"><a href="admin.html">Dashboard</a>
+                            <a href="#" onclick="logout()">Déconnexion</a></nav></div>
+                        </header>
+
+<button class="back-btn" onclick="if(history.length>1){history.back()}else{location.href='index.html'}" title="Retour">←</button>
+
+
+<!-- INTRODUCTION -->
+
+
+
+                        <main class="wrap">
+                            <div class="bar"><div>
+                                <h1>Gestion des véhicules</h1>
+                                
+                                <p>Catalogue et informations techniques.</p>
+                            </div>
+                            <button class="btn" onclick="nouveau()">+ Nouveau véhicule</button></div>
+                            <form id="form" class="form" style="display:none">
+                                <input type="hidden" id="id">
+                                <div class="form-grid">
+                                    <input id="modele" placeholder="Modèle *" required>
+                                    <input id="gamme" placeholder="Gamme *" required>
+                                    <input id="version" placeholder="Version">
+                                    <input id="motorisation" placeholder="Motorisation">
+                                    <input id="transmission" placeholder="Transmission">
+                                    <input id="couleur" placeholder="Couleur">
+                                    <input id="annee" type="number" placeholder="Année">
+                                    <input id="prix" type="number" step="0.01" placeholder="Prix DT"><input id="image" placeholder="Nom image (ex: classe-a.jpg)"><input id="disponibilite" placeholder="Disponible: true / false" value="true"><textarea id="description" placeholder="Description"></textarea><textarea id="specs" placeholder="Caractéristiques techniques"></textarea>
+                                    <textarea id="options" placeholder="Options"></textarea>
+                                </div><br><button class="btn">Enregistrer</button> 
+                                <button type="button" onclick="annuler()">Annuler</button></form><div class="table"><table><thead><tr><th>Image</th><th>Modèle</th><th>Gamme</th><th>Motorisation</th><th>Année</th><th>Prix</th><th>Disponibilité</th><th>Actions</th></tr></thead><tbody id="body"></tbody></table></div></main><script src="admin.js"></script><script>requireLogin();let data=[];const $=id=>document.getElementById(id);async function charger(){const r=await api('/api/vehicules');data=await r.json();$('body').innerHTML=data.map(v=>`<tr><td><img class="thumb" src="image/${v.image||'img.jpg'}" onerror="this.src='image/img.jpg'"></td><td>${v.modele||''}</td><td>${v.gamme||''}</td><td>${v.motorisation||''}</td><td>${v.annee||''}</td><td>${v.prix??'—'} DT</td><td>${v.disponibilite?'Disponible':'Non disponible'}</td><td><button onclick="editer(${v.id})">Modifier</button> <button onclick="supprimer(${v.id})">Supprimer</button></td></tr>`).join('')||'<tr><td colspan="8">Aucun véhicule.</td></tr>'}function nouveau(){ $('form').style.display='block';$('form').reset();$('id').value=''}function annuler(){$('form').style.display='none'}function editer(id){const v=data.find(x=>x.id===id);if(!v)return;$('form').style.display='block';$('id').value=v.id;$('modele').value=v.modele||'';$('gamme').value=v.gamme||'';$('version').value=v.version||'';$('motorisation').value=v.motorisation||'';$('transmission').value=v.transmission||'';$('couleur').value=v.couleur||'';$('annee').value=v.annee||'';$('prix').value=v.prix??'';$('image').value=v.image||'';$('disponibilite').value=v.disponibilite;$('description').value=v.description||'';$('specs').value=v.caracteristiquesTechniques||'';$('options').value=v.options||'';window.scrollTo(0,0)}$('form').addEventListener('submit',async e=>{e.preventDefault();const d={modele:$('modele').value,gamme:$('gamme').value,version:$('version').value,motorisation:$('motorisation').value,transmission:$('transmission').value,couleur:$('couleur').value,annee:Number($('annee').value)||null,prix:Number($('prix').value)||null,image:$('image').value,disponibilite:$('disponibilite').value!=='false',description:$('description').value,caracteristiquesTechniques:$('specs').value,options:$('options').value};const id=$('id').value;const r=await api(id?'/api/vehicules/'+id:'/api/vehicules',{method:id?'PUT':'POST',body:JSON.stringify(d)});if(r.ok){annuler();charger()}else alert('Erreur lors de l’enregistrement')});async function supprimer(id){if(confirm('Supprimer ce véhicule ?')){const r=await api('/api/vehicules/'+id,{method:'DELETE'});if(r.ok)charger()}}charger();</script></body></html>

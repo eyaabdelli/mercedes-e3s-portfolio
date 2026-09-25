@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Fiche véhicule — E3S Mercedes-Benz</title>
+
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+
+<body>
+
+<header class="site-header">
+
+    <div class="nav-inner">
+
+        <div class="logo">
+            E3S · MERCEDES-BENZ
+        </div>
+
+        <nav class="nav-links">
+            <a href="agence.html">L'Agence</a>
+            <a href="index.html">Accueil</a>
+            <a href="vehicules.html">Nos Véhicules</a>
+            <a href="proforma.html">Demande de proforma</a>
+            <a href="contact.html">Contact</a>
+            <a href="atelier.html">Atelier</a>
+            <a href="magasin.html">magasin</a>
+        </nav>
+
+    </div>
+
+</header>
+
+
+<section>
+
+    <div class="section-head">
+
+        <h2>Fiche du véhicule</h2>
+
+        <p>
+            Découvrez les détails de votre véhicule Mercedes-Benz
+        </p>
+
+    </div>
+
+
+    <div id="fiche-vehicule">
+
+        <div class="fiche-card">
+
+            <img
+                id="fiche-image"
+                class="fiche-image"
+                src=""
+                alt="Véhicule Mercedes-Benz"
+            >
+
+            <div class="fiche-info">
+
+                <div id="fiche-gamme" class="fiche-gamme"></div>
+
+                <div id="fiche-model" class="fiche-model"></div>
+
+                <div id="fiche-specs"></div>
+
+                <div id="fiche-price" class="fiche-price"></div>
+
+                <div id="fiche-description" class="fiche-description"></div>
+
+                <a
+                    href="proforma.html"
+                    class="btn-fill fiche-button"
+                >
+                    Demander un proforma
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<footer>
+    © 2026 E3S — Agence Mercedes-Benz
+</footer>
+
+
+<script>
+
+const params = new URLSearchParams(window.location.search);
+const id = params.get("id");
+
+const fiche = document.getElementById("fiche-vehicule");
+
+// Vérifier si un ID est présent dans l'URL
+if (!id) {
+
+    fiche.innerHTML = `
+        <div class="fiche-card">
+
+            <div class="fiche-info">
+
+                <div class="fiche-model">
+                    Véhicule non sélectionné
+                </div>
+
+                <p>
+                    Veuillez sélectionner un véhicule
+                    depuis le catalogue.
+                </p>
+
+                <a
+                    href="vehicules.html"
+                    class="btn-fill fiche-button"
+                >
+                    Voir les véhicules
+                </a>
+
+            </div>
+
+        </div>
+    `;
+
+} else {
+
+    fetch("http://localhost:8080/api/vehicules/" + id)
+
+        .then(response => {
+
+            if (!response.ok) {
+                throw new Error(
+                    "Véhicule introuvable (HTTP " +
+                    response.status +
+                    ")"
+                );
+            }
+
+            return response.json();
+
+        })
+
+        .then(v => {
+
+            console.log("Véhicule chargé :", v);
+
+            const photo = v.image
+                ? "image/" + v.image
+                : "image/classe-a.jpg";
+
+
+            fiche.innerHTML = `
+
+                <div class="fiche-card">
+
+                    <img
+                        src="${photo}"
+                        class="fiche-image"
+                        alt="${v.modele || "Véhicule Mercedes-Benz"}"
+                        onerror="this.src='image/classe-a.jpg'"
+                    >
+
+
+                    <div class="fiche-info">
+
+                        <div class="fiche-gamme">
+                            ${v.gamme || ""}
+                        </div>
+
+
+                        <div class="fiche-model">
+                            ${v.modele || "Véhicule"}
+                        </div>
+
+
+                        <div class="fiche-spec">
+                            <strong>Version :</strong>
+                            ${v.version || "Non renseignée"}
+                        </div>
+
+
+                        <div class="fiche-spec">
+                            <strong>Motorisation :</strong>
+                            ${v.motorisation || "Non renseignée"}
+                        </div>
+
+
+                        <div class="fiche-spec">
+                            <strong>Transmission :</strong>
+                            ${v.transmission || "Non renseignée"}
+                        </div>
+
+
+                        <div class="fiche-spec">
+                            <strong>Couleur :</strong>
+                            ${v.couleur || "Non renseignée"}
+                        </div>
+
+
+                        <div class="fiche-spec">
+                            <strong>Année :</strong>
+                            ${v.annee || "Non renseignée"}
+                        </div>
+
+
+                        <div class="fiche-price">
+
+                            ${
+                                v.prix != null
+                                    ? v.prix + " DT"
+                                    : "Prix sur demande"
+                            }
+
+                        </div>
+
+
+                        <div class="fiche-spec">
+
+                            <strong>Disponibilité :</strong>
+
+                            ${
+                                v.disponibilite
+                                    ? "Disponible"
+                                    : "Non disponible"
+                            }
+
+                        </div>
+
+
+                        <div class="fiche-description">
+
+                            <strong>Description :</strong>
+
+                            <br><br>
+
+                            ${
+                                v.description ||
+                                "Aucune description disponible."
+                            }
+
+                        </div>
+
+
+                        <div class="fiche-spec">
+
+                            <strong>
+                                Caractéristiques techniques :
+                            </strong>
+
+                            <br><br>
+
+                            ${
+                                v.caracteristiquesTechniques ||
+                                "Non renseignées"
+                            }
+
+                        </div>
+
+
+                        <div class="fiche-spec">
+
+                            <strong>
+                                Options :
+                            </strong>
+
+                            <br><br>
+
+                            ${
+                                v.options ||
+                                "Aucune option renseignée"
+                            }
+
+                        </div>
+
+
+                        <a
+                            href="proforma.html?id=${v.id}"
+                            class="btn-fill fiche-button"
+                        >
+                            Demander un proforma
+                        </a>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        })
+
+
+        .catch(error => {
+
+            console.error(
+                "Erreur lors du chargement du véhicule :",
+                error
+            );
+
+            fiche.innerHTML = `
+
+                <div class="fiche-card">
+
+                    <div class="fiche-info">
+
+                        <div class="fiche-model">
+                            Erreur
+                        </div>
+
+                        <p>
+                            Impossible de charger les informations
+                            du véhicule.
+                        </p>
+
+                        <a
+                            href="vehicules.html"
+                            class="btn-fill fiche-button"
+                        >
+                            Retour aux véhicules
+                        </a>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        });
+
+}
+
+</script>
+
+</script>
+
+
+</body>
+
+</html>
